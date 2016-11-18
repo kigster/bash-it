@@ -92,8 +92,6 @@ COMMAND_NUMBER_THEME_PROMPT_CHAR=${POWERLINE_COMMAND_NUMBER_CHAR:="#"}
 POWERLINE_LEFT_PROMPT=${POWERLINE_LEFT_PROMPT:="scm python_venv ruby node cwd"}
 POWERLINE_RIGHT_PROMPT=${POWERLINE_RIGHT_PROMPT:="in_vim clock battery user_info"}
 
-<<<<<<< HEAD
-=======
 function set_rgb_color {
   if [[ "${1}" != "-" ]]; then
     fg="38;5;${1}"
@@ -286,5 +284,4 @@ function __powerline_prompt_command {
         SEGMENTS_AT_LEFT SEGMENTS_AT_RIGHT
 }
 
->>>>>>> Printing hostname always
 safe_append_prompt_command __powerline_prompt_command
