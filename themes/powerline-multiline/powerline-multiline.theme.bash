@@ -57,8 +57,6 @@ IN_VIM_THEME_PROMPT_TEXT="vim"
 POWERLINE_LEFT_PROMPT=${POWERLINE_LEFT_PROMPT:="scm ruby cwd"}
 POWERLINE_RIGHT_PROMPT=${POWERLINE_RIGHT_PROMPT:="clock user_info"}
 
-<<<<<<< HEAD
-=======
 function set_rgb_color {
   if [[ "${1}" != "-" ]]; then
     fg="38;5;${1}"
@@ -251,5 +249,4 @@ function __powerline_prompt_command {
         SEGMENTS_AT_LEFT SEGMENTS_AT_RIGHT
 }
 
->>>>>>> Printing hostname always
 safe_append_prompt_command __powerline_prompt_command
