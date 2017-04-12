@@ -1,9 +1,4 @@
 #!/usr/bin/env bash
-<<<<<<< HEAD
-#
-# Based on 'bobby' theme with the addition of virtualenv_prompt
-#
-=======
 # encoding: UTF-8
 
 export txtblk='\e[0;30m' # Black - Regular
@@ -40,8 +35,6 @@ export bakcyn='\e[46m'   # Cyan
 export bakwht='\e[47m'   # White
 export txtrst='\e[0m'    # Text Reset
 
->>>>>>> cb35676... Printing hostname always
-
 SCM_THEME_PROMPT_DIRTY=" ${red}✗"
 SCM_THEME_PROMPT_CLEAN=" ${green}✓"
 SCM_THEME_PROMPT_PREFIX=" ${yellow}|${reset_color}"
@@ -49,16 +42,11 @@ SCM_THEME_PROMPT_SUFFIX="${yellow}|"
 
 RVM_THEME_PROMPT_PREFIX="|"
 RVM_THEME_PROMPT_SUFFIX="|"
-<<<<<<< HEAD
-#VIRTUALENV_THEME_PROMPT_PREFIX='|'
-#VIRTUALENV_THEME_PROMPT_SUFFIX='|'
 
 function prompt_command() {
     PS1="\n|${green}${red}${reset_color}\h ${orange}in ${reset_color}\w\n${yellow}$(scm_char)$(scm_prompt_info) ${yellow}→${white} "
 }
 
-safe_append_prompt_command prompt_command
-=======
 VIRTUALENV_THEME_PROMPT_PREFIX='|'
 VIRTUALENV_THEME_PROMPT_SUFFIX='|'
 
@@ -86,10 +74,5 @@ function prompt_char {
   fi
 }
 
-function prompt_command() {
-  PS1="\n${black}$(ruby_version_prompt)${blue}$(where) ${orange}in ${reset_color}\w\n${yellow}$(scm_char)$(scm_prompt_info) $(prompt_char)"
-}
-
 PROMPT_COMMAND=prompt_command;
 
->>>>>>> cb35676... Printing hostname always

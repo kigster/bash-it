@@ -33,6 +33,7 @@ RVM_THEME_PROMPT_PREFIX=""
 RVM_THEME_PROMPT_SUFFIX=""
 RBENV_THEME_PROMPT_PREFIX=""
 RBENV_THEME_PROMPT_SUFFIX=""
+
 RUBY_THEME_PROMPT_COLOR=161
 RUBY_CHAR=${POWERLINE_RUBY_CHAR:="® "}
 
@@ -85,10 +86,11 @@ function __powerline_user_info_prompt {
       fi
       ;;
     *)
+      local prompt_hostname=${HOSTNAME%.local}
       if [[ -n "${SSH_CLIENT}" ]]; then
-        user_info="${USER_INFO_SSH_CHAR}${USER}@${HOSTNAME}"
+        user_info="${USER_INFO_SSH_CHAR}${USER}@${prompt_hostname}"
       else
-        user_info="${USER}@${HOSTNAME}"
+        user_info="${USER}@${prompt_hostname}"
       fi
       ;;
   esac
