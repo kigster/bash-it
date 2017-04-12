@@ -32,6 +32,7 @@ RVM_THEME_PROMPT_PREFIX=""
 RVM_THEME_PROMPT_SUFFIX=""
 RBENV_THEME_PROMPT_PREFIX=""
 RBENV_THEME_PROMPT_SUFFIX=""
+
 RUBY_THEME_PROMPT_COLOR=161
 RUBY_CHAR=${POWERLINE_RUBY_CHAR:="® "}
 
@@ -50,9 +51,6 @@ THEME_CLOCK_FORMAT=${THEME_CLOCK_FORMAT:="%H:%M:%S"}
 
 IN_VIM_THEME_PROMPT_COLOR=245
 IN_VIM_THEME_PROMPT_TEXT="vim"
-
-#POWERLINE_LEFT_PROMPT=${POWERLINE_LEFT_PROMPT:="cwd"}
-#POWERLINE_RIGHT_PROMPT=${POWERLINE_RIGHT_PROMPT:="scm ruby clock user_info"}
 
 POWERLINE_LEFT_PROMPT=${POWERLINE_LEFT_PROMPT:="scm ruby cwd"}
 POWERLINE_RIGHT_PROMPT=${POWERLINE_RIGHT_PROMPT:="clock user_info"}
@@ -82,10 +80,11 @@ function __powerline_user_info_prompt {
       fi
       ;;
     *)
+      local prompt_hostname=${HOSTNAME%.local}
       if [[ -n "${SSH_CLIENT}" ]]; then
-        user_info="${USER_INFO_SSH_CHAR}${USER}@${HOSTNAME}"
+        user_info="${USER_INFO_SSH_CHAR}${USER}@${prompt_hostname}"
       else
-        user_info="${USER}@${HOSTNAME}"
+        user_info="${USER}@${prompt_hostname}"
       fi
       ;;
   esac
