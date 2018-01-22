@@ -14,7 +14,7 @@ RVM_THEME_PROMPT_SUFFIX="|"
 #VIRTUALENV_THEME_PROMPT_SUFFIX='|'
 
 function prompt_command() {
-    PS1="\n${green}${red}${reset_color}\h ${orange}in ${reset_color}\w\n${yellow}$(scm_char)$(scm_prompt_info) ${yellow}→${white} "
+    PS1="\n|${green}${red}${reset_color}\h ${orange}in ${reset_color}\w\n${yellow}$(scm_char)$(scm_prompt_info) ${yellow}→${white} "
 }
 
 safe_append_prompt_command prompt_command
