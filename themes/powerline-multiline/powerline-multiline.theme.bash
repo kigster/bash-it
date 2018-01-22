@@ -22,7 +22,7 @@ SCM_NONE_CHAR=""
 SCM_GIT_CHAR=${POWERLINE_SCM_GIT_CHAR:=" "}
 SCM_THEME_PROMPT_CLEAN=""
 SCM_THEME_PROMPT_DIRTY=""
-SCM_THEME_PROMPT_CLEAN_COLOR=25
+SCM_THEME_PROMPT_CLEAN_COLOR=39
 SCM_THEME_PROMPT_DIRTY_COLOR=88
 SCM_THEME_PROMPT_STAGED_COLOR=30
 SCM_THEME_PROMPT_UNSTAGED_COLOR=92
@@ -40,20 +40,20 @@ CWD_THEME_PROMPT_COLOR=240
 
 LAST_STATUS_THEME_PROMPT_COLOR=196
 
-CLOCK_THEME_PROMPT_COLOR=240
+CLOCK_THEME_PROMPT_COLOR=25
 
 BATTERY_AC_CHAR=${BATTERY_AC_CHAR:="🔋 "}
 BATTERY_STATUS_THEME_PROMPT_GOOD_COLOR=0
 BATTERY_STATUS_THEME_PROMPT_LOW_COLOR=208
 BATTERY_STATUS_THEME_PROMPT_CRITICAL_COLOR=160
 
-THEME_CLOCK_FORMAT=${THEME_CLOCK_FORMAT:="%H:%M:%S"}
+THEME_CLOCK_FORMAT=${THEME_CLOCK_FORMAT:="%H:%M%p"}
 
 IN_VIM_THEME_PROMPT_COLOR=245
 IN_VIM_THEME_PROMPT_TEXT="vim"
 
 POWERLINE_LEFT_PROMPT=${POWERLINE_LEFT_PROMPT:="scm ruby cwd"}
-POWERLINE_RIGHT_PROMPT=${POWERLINE_RIGHT_PROMPT:="clock user_info"}
+POWERLINE_RIGHT_PROMPT=${POWERLINE_RIGHT_PROMPT:="chef user_info clock"}
 
 function set_rgb_color {
   if [[ "${1}" != "-" ]]; then
@@ -143,9 +143,13 @@ function __powerline_cwd_prompt {
   echo "$(pwd | sed "s|^${HOME}|~|")|${CWD_THEME_PROMPT_COLOR}"
 }
 
-function __powerline_clock_prompt {
-  echo "$(date +"${THEME_PROMPT_CLOCK_FORMAT}")|${CLOCK_THEME_PROMPT_COLOR}"
+function __powerline_chef_prompt {
+  echo "${bldylw}$(current-chef-org 2>/dev/null)|${CWD_THEME_PROMPT_COLOR}"
 }
+#
+# function __powerline_clock_prompt {
+#   echo "$(date +"${THEME_PROMPT_CLOCK_FORMAT}")|${CLOCK_THEME_PROMPT_COLOR}"
+# }
 
 function __powerline_battery_prompt {
   local color=""
@@ -196,7 +200,7 @@ function __powerline_right_segment {
   local params=( $1 )
   IFS="${OLD_IFS}"
   local separator_char=""
-  local padding=2
+  local padding="0"
   local separator_color=""
 
   if [[ "${SEGMENTS_AT_RIGHT}" -eq 0 ]]; then
@@ -218,7 +222,7 @@ function __powerline_prompt_command {
 
   LEFT_PROMPT=""
   RIGHT_PROMPT=""
-  RIGHT_PROMPT_LENGTH=0
+  RIGHT_PROMPT_LENGTH="-1"
   SEGMENTS_AT_LEFT=0
   SEGMENTS_AT_RIGHT=0
   LAST_SEGMENT_COLOR=""
@@ -247,5 +251,8 @@ function __powerline_prompt_command {
         LEFT_PROMPT RIGHT_PROMPT RIGHT_PROMPT_LENGTH \
         SEGMENTS_AT_LEFT SEGMENTS_AT_RIGHT
 }
+
+#POWERLINE_LEFT_PROMPT=${POWERLINE_LEFT_PROMPT:="scm ruby cwd"}
+#POWERLINE_RIGHT_PROMPT=${POWERLINE_RIGHT_PROMPT:="clock user_info chef"}
 
 safe_append_prompt_command __powerline_prompt_command
