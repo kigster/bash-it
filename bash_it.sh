@@ -1,6 +1,21 @@
 #!/usr/bin/env bash
 # Initialize Bash It
 
+_debug() {
+  [[ -z $DEBUG ]] && return
+  echo $*
+}
+
+# Reload Library
+case $OSTYPE in
+  darwin*)
+    alias reload='source ~/.bash_profile'
+    ;;
+  *)
+    alias reload='source ~/.bashrc'
+    ;;
+esac
+
 # Only set $BASH_IT if it's not already set
 if [ -z "$BASH_IT" ];
 then
@@ -32,17 +47,19 @@ APPEARANCE_LIB="${BASH_IT}/lib/appearance.bash"
 for config_file in $LIB
 do
   if [ "$config_file" != "$APPEARANCE_LIB" ]; then
-    # shellcheck disable=SC1090
     source "$config_file"
   fi
 done
 
+_debug "loading enabled bash-it plugins"
 # Load the global "enabled" directory
 _load_global_bash_it_files
 
 # Load enabled aliases, completion, plugins
 for file_type in "aliases" "plugins" "completion"
 do
+  _debug "load ${bldylw}${file_type}${clr}"
+    # shellcheck disable=SC1090
   _load_bash_it_files $file_type
 done
 
@@ -69,7 +86,9 @@ do
   if [ -e "${BASH_IT}/${file_type}/custom.${file_type}.bash" ]
   then
     # shellcheck disable=SC1090
-    source "${BASH_IT}/${file_type}/custom.${file_type}.bash"
+    sourced_file="${BASH_IT}/${file_type}/custom.${file_type}.bash"
+    _debug "sourcing ${sourced_files}"
+    source ${sourced_file}
   fi
 done
 
@@ -118,5 +137,4 @@ if ! command -v reload &>/dev/null && [ -n "$BASH_IT_RELOAD_LEGACY" ]; then
   esac
 fi
 
-# Disable trap DEBUG on subshells - https://github.com/Bash-it/bash-it/pull/1040
 set +T
