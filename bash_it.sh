@@ -1,6 +1,21 @@
 #!/usr/bin/env bash
 # Initialize Bash It
 
+_debug() {
+  [[ -z $DEBUG ]] && return
+  echo $*
+}
+
+# Reload Library
+case $OSTYPE in
+  darwin*)
+    alias reload='source ~/.bash_profile'
+    ;;
+  *)
+    alias reload='source ~/.bashrc'
+    ;;
+esac
+
 # Only set $BASH_IT if it's not already set
 if [ -z "$BASH_IT" ];
 then
@@ -31,12 +46,14 @@ LIB="${BASH_IT}/lib/*.bash"
 APPEARANCE_LIB="${BASH_IT}/lib/appearance.bash"
 for _bash_it_config_file in $LIB
 do
+
   if [ "$_bash_it_config_file" != "$APPEARANCE_LIB" ]; then
     # shellcheck disable=SC1090
     source "$_bash_it_config_file"
   fi
 done
 
+_debug "loading enabled bash-it plugins"
 # Load the global "enabled" directory
 # "family" param is empty so that files get sources in glob order
 # shellcheck source=./scripts/reloader.bash
@@ -72,7 +89,9 @@ do
   if [ -e "${BASH_IT}/${file_type}/custom.${file_type}.bash" ]
   then
     # shellcheck disable=SC1090
-    source "${BASH_IT}/${file_type}/custom.${file_type}.bash"
+    sourced_file="${BASH_IT}/${file_type}/custom.${file_type}.bash"
+    _debug "sourcing ${sourced_files}"
+    source ${sourced_file}
   fi
 done
 
@@ -121,5 +140,4 @@ if ! command -v reload &>/dev/null && [ -n "$BASH_IT_RELOAD_LEGACY" ]; then
   esac
 fi
 
-# Disable trap DEBUG on subshells - https://github.com/Bash-it/bash-it/pull/1040
 set +T
