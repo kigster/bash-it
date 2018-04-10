@@ -6,8 +6,8 @@
 # in glorious red / blue / yellow color scheme
 
 
-RBENV_THEME_PROMPT_PREFIX='/'
-RBENV_THEME_PROMPT_SUFFIX='/'
+RBENV_THEME_PROMPT_PREFIX=' '
+RBENV_THEME_PROMPT_SUFFIX=' '
 
 move-right() {
   by=${1:-1000}
@@ -30,7 +30,7 @@ prompt_setter() {
   if [[ ${code} -eq 0 ]]; then
     status="${green}✔︎"
   else
-    status="${}[ code=${code} ]"
+    status="${red}˟ [ code=${code} ]"
   fi
   # Save history
   history -a

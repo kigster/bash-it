@@ -1,6 +1,11 @@
 #!/usr/bin/env bash
 # Initialize Bash It
 
+_debug() {
+  [[ -z $DEBUG ]] && return
+  echo $*
+}
+
 # Reload Library
 case $OSTYPE in
   darwin*)
@@ -41,17 +46,21 @@ APPEARANCE_LIB="${BASH_IT}/lib/appearance.bash"
 for config_file in $LIB
 do
   if [ $config_file != $APPEARANCE_LIB ]; then
+    _debug "loading config file ${config_file}"
     # shellcheck disable=SC1090
     source $config_file
   fi
 done
 
+_debug "loading enabled bash-it plugins"
 # Load the global "enabled" directory
 _load_global_bash_it_files
 
 # Load enabled aliases, completion, plugins
 for file_type in "aliases" "plugins" "completion"
 do
+  _debug "load ${bldylw}${file_type}${clr}"
+    # shellcheck disable=SC1090
   _load_bash_it_files $file_type
 done
 
@@ -73,7 +82,9 @@ do
   if [ -e "${BASH_IT}/${file_type}/custom.${file_type}.bash" ]
   then
     # shellcheck disable=SC1090
-    source "${BASH_IT}/${file_type}/custom.${file_type}.bash"
+    sourced_file="${BASH_IT}/${file_type}/custom.${file_type}.bash"
+    _debug "sourcing ${sourced_files}"
+    source ${sourced_file}
   fi
 done
 
@@ -83,6 +94,7 @@ for config_file in $CUSTOM
 do
   if [ -e "${config_file}" ]; then
     # shellcheck disable=SC1090
+    _debug "sourcing ${config_file}"
     source $config_file
   fi
 done
@@ -100,14 +112,6 @@ if [ -s /usr/bin/gloobus-preview ]; then
 elif [ -s /Applications/Preview.app ]; then
   # shellcheck disable=SC2034
   PREVIEW="/Applications/Preview.app"
-fi
-
-# Load all the Jekyll stuff
-
-if [ -e "$HOME/.jekyllconfig" ]
-then
-  # shellcheck disable=SC1090
-  . "$HOME/.jekyllconfig"
 fi
 
 # Disable trap DEBUG on subshells - https://github.com/Bash-it/bash-it/pull/1040
