@@ -47,13 +47,13 @@ BATTERY_STATUS_THEME_PROMPT_GOOD_COLOR=0
 BATTERY_STATUS_THEME_PROMPT_LOW_COLOR=208
 BATTERY_STATUS_THEME_PROMPT_CRITICAL_COLOR=160
 
-THEME_CLOCK_FORMAT=${THEME_CLOCK_FORMAT:="%H:%M%p"}
+THEME_CLOCK_FORMAT=${THEME_CLOCK_FORMAT:="%H:%M"}
 
 IN_VIM_THEME_PROMPT_COLOR=245
 IN_VIM_THEME_PROMPT_TEXT="vim"
 
 POWERLINE_LEFT_PROMPT=${POWERLINE_LEFT_PROMPT:="scm ruby cwd"}
-POWERLINE_RIGHT_PROMPT=${POWERLINE_RIGHT_PROMPT:="chef user_info clock"}
+POWERLINE_RIGHT_PROMPT=${POWERLINE_RIGHT_PROMPT:="user_info clock"}
 
 function set_rgb_color {
   if [[ "${1}" != "-" ]]; then
@@ -144,7 +144,13 @@ function __powerline_cwd_prompt {
 }
 
 function __powerline_chef_prompt {
-  echo "${bldylw}$(current-chef-org 2>/dev/null)|${CWD_THEME_PROMPT_COLOR}"
+  if [[ -n "${CHEF_ORG}" || -n "$(type current-chef-org 2>/dev/null)" ]]; then
+    if [[ -n ${CHEF_ORG} ]]; then
+      echo "${CHEF_ORG}|${PYTHON_VENV_THEME_PROMPT_COLOR}"
+    else 
+      echo "$(current-chef-org 2>/dev/null)|${PYTHON_VENV_THEME_PROMPT_COLOR}"
+    fi
+  fi
 }
 #
 # function __powerline_clock_prompt {
@@ -200,7 +206,7 @@ function __powerline_right_segment {
   local params=( $1 )
   IFS="${OLD_IFS}"
   local separator_char=""
-  local padding="0"
+  local padding=1
   local separator_color=""
 
   if [[ "${SEGMENTS_AT_RIGHT}" -eq 0 ]]; then
@@ -222,7 +228,7 @@ function __powerline_prompt_command {
 
   LEFT_PROMPT=""
   RIGHT_PROMPT=""
-  RIGHT_PROMPT_LENGTH="-1"
+  RIGHT_PROMPT_LENGTH=2
   SEGMENTS_AT_LEFT=0
   SEGMENTS_AT_RIGHT=0
   LAST_SEGMENT_COLOR=""
@@ -251,8 +257,5 @@ function __powerline_prompt_command {
         LEFT_PROMPT RIGHT_PROMPT RIGHT_PROMPT_LENGTH \
         SEGMENTS_AT_LEFT SEGMENTS_AT_RIGHT
 }
-
-#POWERLINE_LEFT_PROMPT=${POWERLINE_LEFT_PROMPT:="scm ruby cwd"}
-#POWERLINE_RIGHT_PROMPT=${POWERLINE_RIGHT_PROMPT:="clock user_info chef"}
 
 safe_append_prompt_command __powerline_prompt_command
