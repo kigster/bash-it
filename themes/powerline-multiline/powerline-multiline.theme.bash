@@ -27,6 +27,13 @@ PYTHON_VENV_CHAR=${POWERLINE_PYTHON_VENV_CHAR:="❲p❳ "}
 CONDA_PYTHON_VENV_CHAR=${POWERLINE_CONDA_PYTHON_VENV_CHAR:="❲c❳ "}
 PYTHON_VENV_THEME_PROMPT_COLOR=${POWERLINE_PYTHON_VENV_COLOR:=35}
 
+CHEF_THEME_PROMPT_COLOR=28
+CHEF_THEME_PROMPT_COLOR_dev=41
+CHEF_THEME_PROMPT_COLOR_demo=31
+CHEF_THEME_PROMPT_COLOR_staging=63
+CHEF_THEME_PROMPT_COLOR_production=203
+
+
 SCM_NONE_CHAR=""
 SCM_GIT_CHAR=${POWERLINE_SCM_GIT_CHAR:=" "}
 SCM_HG_CHAR=${POWERLINE_SCM_HG_CHAR:="☿ "}
@@ -182,13 +189,21 @@ function __powerline_cwd_prompt {
   echo "$(pwd | sed "s|^${HOME}|~|")|${CWD_THEME_PROMPT_COLOR}"
 }
 
-function __powerline_chef_prompt {
-  if [[ -n "${CHEF_ORG}" || -n "$(type current-chef-org 2>/dev/null)" ]]; then
-    if [[ -n ${CHEF_ORG} ]]; then
-      echo "${CHEF_ORG}|${PYTHON_VENV_THEME_PROMPT_COLOR}"
-    else 
-      echo "$(current-chef-org 2>/dev/null)|${PYTHON_VENV_THEME_PROMPT_COLOR}"
-    fi
+function __chef_org() {
+   if [[ -n ${CHEF_ORG} ]]; then 
+     printf ${CHEF_ORG}
+   elif [[ -n "$(type current-chef-org 2>/dev/null)" ]]; then
+     current-chef-org 2>/dev/null
+   fi
+}
+
+function __powerline_chef_prompt() {
+  local org=$(__chef_org)
+  if [[ -n ${org} ]] ; then
+    varname="CHEF_THEME_PROMPT_COLOR_${org}"
+    local color="${!varname}"
+    [[ -z ${color} ]] && color="${CHEF_THEME_PROMPT_COLOR}"
+    echo "${org}|${color}"
   fi
 }
 #
@@ -293,8 +308,8 @@ function __powerline_prompt_command {
 
   ## cleanup ##
   unset LAST_SEGMENT_COLOR \
-        LEFT_PROMPT RIGHT_PROMPT RIGHT_PROMPT_LENGTH \
-        SEGMENTS_AT_LEFT SEGMENTS_AT_RIGHT
+    LEFT_PROMPT RIGHT_PROMPT RIGHT_PROMPT_LENGTH \
+    SEGMENTS_AT_LEFT SEGMENTS_AT_RIGHT
 }
 
 safe_append_prompt_command __powerline_prompt_command
