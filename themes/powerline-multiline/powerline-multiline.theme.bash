@@ -64,9 +64,15 @@ THEME_CLOCK_FORMAT=${THEME_CLOCK_FORMAT:="%H:%M"}
 IN_VIM_THEME_PROMPT_COLOR=245
 IN_VIM_THEME_PROMPT_TEXT="vim"
 
-<<<<<<< HEAD
 POWERLINE_LEFT_PROMPT=${POWERLINE_LEFT_PROMPT:="scm ruby chef cwd"}
 POWERLINE_RIGHT_PROMPT=${POWERLINE_RIGHT_PROMPT:="user_info clock"}
+
+# @kigster Overrides
+
+HOST_THEME_PROMPT_COLOR=0
+
+POWERLINE_LEFT_PROMPT=${POWERLINE_LEFT_PROMPT:="scm python_venv ruby cwd"}
+POWERLINE_RIGHT_PROMPT=${POWERLINE_RIGHT_PROMPT:="in_vim clock battery user_info"}
 
 function set_rgb_color {
   if [[ "${1}" != "-" ]]; then
@@ -278,11 +284,6 @@ function __powerline_prompt_command {
     LEFT_PROMPT RIGHT_PROMPT RIGHT_PROMPT_LENGTH \
     SEGMENTS_AT_LEFT SEGMENTS_AT_RIGHT
 }
-=======
-HOST_THEME_PROMPT_COLOR=0
 
-POWERLINE_LEFT_PROMPT=${POWERLINE_LEFT_PROMPT:="scm python_venv ruby cwd"}
-POWERLINE_RIGHT_PROMPT=${POWERLINE_RIGHT_PROMPT:="in_vim clock battery user_info"}
->>>>>>> 8feebc0aa901078ec3ed54c94b3b1afc1e8f34ae
 
 safe_append_prompt_command __powerline_prompt_command

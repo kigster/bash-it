@@ -1,7 +1,6 @@
 #!/usr/bin/env bash
 # Initialize Bash It
 
-<<<<<<< HEAD
 _debug() {
   [[ -z $DEBUG ]] && return
   echo $*
@@ -17,8 +16,6 @@ case $OSTYPE in
     ;;
 esac
 
-=======
->>>>>>> 8feebc0aa901078ec3ed54c94b3b1afc1e8f34ae
 # Only set $BASH_IT if it's not already set
 if [ -z "$BASH_IT" ];
 then
@@ -49,12 +46,7 @@ LIB="${BASH_IT}/lib/*.bash"
 APPEARANCE_LIB="${BASH_IT}/lib/appearance.bash"
 for config_file in $LIB
 do
-<<<<<<< HEAD
-  if [ $config_file != $APPEARANCE_LIB ]; then
-    _debug "loading config file ${config_file}"
-=======
   if [ "$config_file" != "$APPEARANCE_LIB" ]; then
->>>>>>> 8feebc0aa901078ec3ed54c94b3b1afc1e8f34ae
     # shellcheck disable=SC1090
     source "$config_file"
   fi
@@ -107,12 +99,7 @@ for config_file in $CUSTOM
 do
   if [ -e "${config_file}" ]; then
     # shellcheck disable=SC1090
-<<<<<<< HEAD
-    _debug "sourcing ${config_file}"
-    source $config_file
-=======
     source "$config_file"
->>>>>>> 8feebc0aa901078ec3ed54c94b3b1afc1e8f34ae
   fi
 done
 
@@ -131,8 +118,6 @@ elif [ -s /Applications/Preview.app ]; then
   PREVIEW="/Applications/Preview.app"
 fi
 
-<<<<<<< HEAD
-=======
 # Load all the Jekyll stuff
 
 if [ -e "$HOME/.jekyllconfig" ]
@@ -153,6 +138,5 @@ if ! command -v reload &>/dev/null && [ -n "$BASH_IT_RELOAD_LEGACY" ]; then
   esac
 fi
 
->>>>>>> 8feebc0aa901078ec3ed54c94b3b1afc1e8f34ae
 # Disable trap DEBUG on subshells - https://github.com/Bash-it/bash-it/pull/1040
 set +T
