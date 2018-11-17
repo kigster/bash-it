@@ -67,6 +67,13 @@ IN_VIM_THEME_PROMPT_TEXT="vim"
 POWERLINE_LEFT_PROMPT=${POWERLINE_LEFT_PROMPT:="scm ruby chef cwd"}
 POWERLINE_RIGHT_PROMPT=${POWERLINE_RIGHT_PROMPT:="user_info clock"}
 
+# @kigster Overrides
+
+HOST_THEME_PROMPT_COLOR=0
+
+POWERLINE_LEFT_PROMPT=${POWERLINE_LEFT_PROMPT:="scm python_venv ruby cwd"}
+POWERLINE_RIGHT_PROMPT=${POWERLINE_RIGHT_PROMPT:="in_vim clock battery user_info"}
+
 function set_rgb_color {
   if [[ "${1}" != "-" ]]; then
     fg="38;5;${1}"
