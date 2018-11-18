@@ -70,7 +70,7 @@ bash-it ()
     example '$ bash-it disable alias hg [tmux]...'
     example '$ bash-it migrate'
     example '$ bash-it update'
-    example '$ bash-it search [-|@]term1 [-|@]term2 ... [--enable | --disable | --help | --refresh | --no-color ]'
+    example '$ bash-it search [-|@]term1 [-|@]term2 ... [--enable | --disable | --help]'
     example '$ bash-it version'
     example '$ bash-it reload'
     typeset verb=${1:-}
@@ -394,7 +394,7 @@ _disable-thing ()
     fi
 
     local flag="DEFER_CACHE_CLEANUP_FOR_${file_type}"
-    [[ -z ${!flag} ]] && _bash_it_search_cache_clean "${file_type}"
+    [[ -z ${!flag} ]] && _bash-it-cache-clean "${file_type}"
 
     if [ -n "$BASH_IT_AUTOMATIC_RELOAD_AFTER_CONFIG_CHANGE" ]; then
         exec ${0/-/}
@@ -492,7 +492,7 @@ _enable-thing ()
     fi
 
     local flag="DEFER_CACHE_CLEANUP_FOR_${file_type}"
-    [[ -z ${!flag} ]] && _bash_it_search_cache_clean "${file_type}"
+    [[ -z ${!flag} ]] && _bash-it-cache-clean "${file_type}"
 
     if [ -n "$BASH_IT_AUTOMATIC_RELOAD_AFTER_CONFIG_CHANGE" ]; then
         exec ${0/-/}

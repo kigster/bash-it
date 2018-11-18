@@ -45,6 +45,8 @@
 #          plugins:  git ruby
 #      completions:  git
 #
+export BASH_IT_GREP=${BASH_IT_GREP:-$(which egrep)}
+declare -a BASH_IT_COMPONENTS=(aliases plugins completions)
 
 _bash-it-search() {
   _about 'searches for given terms amongst bash-it plugins, aliases and completions'
@@ -53,9 +55,14 @@ _bash-it-search() {
   _example '$ _bash-it-search @git ruby -rvm rake bundler'
 
   local component
-  export BASH_IT_SEARCH_USE_COLOR=true
-  export BASH_IT_GREP=${BASH_IT_GREP:-$(which egrep)}
-  declare -a BASH_IT_COMPONENTS=(aliases plugins completions)
+
+  yellow_underlined='\e[4;33m'
+  bold_green='\e[1;32m'
+  bold_red='\e[1;31m'
+  bold_blue='\e[1;34m'
+  bold_yellow='\e[1;33m'
+  text_black='\e[0;30m'
+  clr='\e[0m'
 
   if [[ -z "$*" ]] ; then
     _bash-it-search-help
@@ -68,9 +75,7 @@ _bash-it-search() {
       _bash-it-search-help
       return 0
     elif [[ ${word} == "--refresh" || ${word} == "-r" ]]; then
-      _bash_it_search_cache_clean
-    elif [[ ${word} == "--no-color" ]]; then
-      export BASH_IT_SEARCH_USE_COLOR=false
+      _bash-it-cache-clean
     else
       args=(${args[@]} ${word})
     fi
@@ -84,67 +89,50 @@ _bash-it-search() {
 }
 
 _bash-it-search-help() {
-  printf "${echo_normal}
-${echo_underline_yellow}USAGE${echo_normal}
+  printf "${bold_yellow}
+${yellow_underlined}USAGE${clr}
 
-   bash-it search [-|@]term1 [-|@]term2 ... \\
-           [ --enable | --disable | --help | --refresh | --no-color ]
+   bash-it search [-|@]term1 [-|@]term2 ... [ --enable | --disable | --help ]
 
-${echo_underline_yellow}DESCRIPTION${echo_normal}
+${yellow_underlined}DESCRIPTION${clr}
 
-   Use ${echo_bold_green}search${echo_normal} bash-it command to search for a list of terms or term negations
-   across all components: aliases, completions and plugins. Components that are
-   enabled are shown in green (or with a check box if --no-color option is used).
+   One of the most time-saving features of the Bash-It search is the ability
+   to globally enable or disable all matches that the search returns. Instead
+   of reading the complete help for each component, simply search for the
+   keyword, and then re-run the search with '--enable' or '--disable' at the
+   end. When used this way, it becomes critical to be able to exclude some
+   search results, and/or be able to match not just a substring, but also
+   force an exact match. All of this is supported by this functionality.
 
-   In addition to simply finding the right component, you can use the results
-   of the search to enable or disable all components that the search returns.
+${yellow_underlined}EXAMPLES${clr}
 
-   When search is used to enable/disable components it becomes clear that
-   you must be able to perform not just a partial match, but an exact match,
-   as well as be able to exclude some components.
-
-      * To exclude a component (or all components matching a substring) use
-        a search term with minus as a prefix, eg '-flow'
-
-      * To perform an exact match, use character '@' in front of the term,
-        eg. '@git' would only match aliases, plugins and completions named 'git'.
-
-${echo_underline_yellow}FLAGS${echo_normal}
-   --enable       ${echo_purple}Enable all matching componenents.${echo_normal}
-   --disable      ${echo_purple}Disable all matching componenents.${echo_normal}
-   --help         ${echo_purple}Print this help.${echo_normal}
-   --refresh      ${echo_purple}Force a refresh of the search cache.${echo_normal}
-   --no-color     ${echo_purple}Disable color output and use monochrome text.${echo_normal}
-
-${echo_underline_yellow}EXAMPLES${echo_normal}
-
-   For example, ${echo_bold_green}bash-it search git${echo_normal} would match any alias, completion
-   or plugin that has the word 'git' in either the module name or
+   For example, ${bold_green}bash-it search git${clr} would match any alias,
+   completion or plugin that has the word 'git' in either the module name or
    it's description. You should see something like this when you run this
    command:
 
-         ${echo_bold_green}❯ bash-it search git${echo_bold_blue}
-               ${echo_bold_yellow}aliases:  ${echo_bold_green}git ${echo_normal}gitsvn
-               ${echo_bold_yellow}plugins:  ${echo_normal}autojump fasd ${echo_bold_green}git ${echo_normal}git-subrepo jgitflow jump
-           ${echo_bold_yellow}completions:  ${echo_bold_green}git ${echo_normal}git_flow git_flow_avh${echo_normal}
+         ${bold_green}❯ bash-it search git${bold_blue}
+               aliases:  git gitsvn
+               plugins:  autojump fasd git git-subrepo jgitflow jump
+           completions:  git git_flow git_flow_avh${clr}
 
    You can exclude some terms by prefixing a term with a minus, eg:
 
-         ${echo_bold_green}❯ bash-it search git -flow -svn${echo_bold_blue}
-               ${echo_bold_yellow}aliases:  ${echo_normal}git
-               ${echo_bold_yellow}plugins:  ${echo_normal}autojump fasd git git-subrepo jump
-           ${echo_bold_yellow}completions:  ${echo_normal}git${echo_normal}
+         ${bold_green}❯ bash-it search git -flow -svn${bold_blue}
+               aliases:  git
+               plugins:  autojump fasd git git-subrepo jump
+           completions:  git${clr}
 
    Finally, if you prefix a term with '@' symbol, that indicates an exact
    match. Note, that we also pass the '--enable' flag, which would ensure
    that all matches are automatically enabled. The example is below:
 
-         ${echo_bold_green}❯ bash-it search @git --enable${echo_bold_blue}
-               ${echo_bold_yellow}aliases:  ${echo_normal}git
-               ${echo_bold_yellow}plugins:  ${echo_normal}git
-           ${echo_bold_yellow}completions:  ${echo_normal}git${echo_normal}
+         ${bold_green}❯ bash-it search @git --enable${bold_blue}
+               aliases:  git
+               plugins:  git
+           completions:  git${clr}
 
-${echo_underline_yellow}SUMMARY${echo_normal}
+${yellow_underlined}SUMMARY${clr}
 
    Take advantage of the search functionality to discover what Bash-It can do
    for you. Try searching for partial term matches, mix and match with the
@@ -163,11 +151,11 @@ _bash-it-cache-file() {
   printf ${file}
 }
 
-_bash_it_search_cache_clean() {
+_bash-it-cache-clean() {
   local component="$1"
   if [[ -z ${component} ]] ; then
     for component in "${BASH_IT_COMPONENTS[@]}" ; do
-      _bash_it_search_cache_clean "${component}"
+      _bash-it-cache-clean "${component}"
     done
   else
     rm -f $(_bash-it-cache-file ${component})
@@ -335,19 +323,19 @@ _bash-it-search-result() {
 
   local color_component color_enable color_disable color_off
 
-  color_sep=':'
-
-  ( ${BASH_IT_SEARCH_USE_COLOR} ) && {
+  [[ -z "${NO_COLOR}" ]] && {
     color_component='\e[1;34m'
     color_enable='\e[1;32m'
     suffix_enable=''
     suffix_disable=''
     color_disable='\e[0;0m'
     color_off='\e[0;0m'
+    color_sep=':'
   }
 
-  ( ${BASH_IT_SEARCH_USE_COLOR} ) || {
+  [[ -n "${NO_COLOR}" ]] && {
     color_component=''
+    color_sep='   —— '
     suffix_enable=' ✓ ︎'
     suffix_disable='  '
     color_enable=''
@@ -385,7 +373,7 @@ _bash-it-search-result() {
       }
 
       local len
-      if ( ${BASH_IT_SEARCH_USE_COLOR} ); then
+      if [[ -n ${NO_COLOR} ]]; then
         local m="${match_color}${match}${suffix}"
         len=${#m}
       else
@@ -395,7 +383,7 @@ _bash-it-search-result() {
 
       printf " ${match_color}${match}${suffix}"  # print current state
       if [[ "${action}" == "${compatible_action}" ]]; then
-        if [[ ${action} == "enable" && ${BASH_IT_SEARCH_USE_COLOR} == false ]]; then
+        if [[ ${action} == "enable" && -z ${NO_COLOR} ]]; then
           _bash-it-flash-term ${len} "${match}${suffix}"
         else
           _bash-it-erase-term ${len}
@@ -411,7 +399,7 @@ _bash-it-search-result() {
       printf "${color_off}"
     done
 
-    [[ ${modified} -gt 0 ]] && _bash_it_search_cache_clean ${component}
+    [[ ${modified} -gt 0 ]] && _bash-it-cache-clean ${component}
     printf "\n"
   fi
 }
@@ -427,7 +415,7 @@ _bash-it-flash-term() {
   local delay=0.1
   local color
 
-  for color in ${text_black} ${echo_bold_blue} ${bold_yellow} ${bold_red} ${echo_bold_green} ; do
+  for color in ${text_black} ${bold_blue} ${bold_yellow} ${bold_red} ${bold_green} ; do
     sleep ${delay}
     _bash-it-rewind "${len}"
     printf "${color}${match}"
