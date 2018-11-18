@@ -70,7 +70,7 @@ bash-it ()
     example '$ bash-it disable alias hg [tmux]...'
     example '$ bash-it migrate'
     example '$ bash-it update'
-    example '$ bash-it search ruby [[-]rake]... [--enable | --disable]'
+    example '$ bash-it search [-|@]term1 [-|@]term2 ... [--enable | --disable | --help]'
     example '$ bash-it version'
     example '$ bash-it reload'
     typeset verb=${1:-}
@@ -393,6 +393,8 @@ _disable-thing ()
         fi
     fi
 
+    _bash-it-cache-clean "${subdirectory}"
+
     if [ -n "$BASH_IT_AUTOMATIC_RELOAD_AFTER_CONFIG_CHANGE" ]; then
         exec ${0/-/}
     fi
@@ -487,6 +489,8 @@ _enable-thing ()
 
         ln -s ../$subdirectory/available/$to_enable "${BASH_IT}/enabled/${use_load_priority}${BASH_IT_LOAD_PRIORITY_SEPARATOR}${to_enable}"
     fi
+
+    _bash-it-cache-clean "${subdirectory}"
 
     if [ -n "$BASH_IT_AUTOMATIC_RELOAD_AFTER_CONFIG_CHANGE" ]; then
         exec ${0/-/}
