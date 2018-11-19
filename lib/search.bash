@@ -96,7 +96,6 @@ _bash-it-search() {
 }
 
 _bash-it-search-help() {
-<<<<<<< HEAD
   printf "${echo_normal}
 ${echo_underline_yellow}USAGE${echo_normal}
 
@@ -112,10 +111,6 @@ ${echo_underline_yellow}DESCRIPTION${echo_normal}
    Use ${echo_bold_green}search${echo_normal} bash-it command to search for a list of terms or term negations
    across all components: aliases, completions and plugins. Components that are
    enabled are shown in green (or with a check box if --no-color option is used).
-=======
-  printf "${bold_yellow}
-${yellow_underlined}USAGE${clr}
->>>>>>> bebdbbc... Speed up bash-it Search & support exact matches
 
    bash-it search [-|@]term1 [-|@]term2 ... [ --enable | --disable | --help ]
 
@@ -131,7 +126,6 @@ ${yellow_underlined}DESCRIPTION${clr}
 
 ${yellow_underlined}EXAMPLES${clr}
 
-<<<<<<< HEAD
 ${echo_underline_yellow}FLAGS${echo_normal}
    --enable   | -e    ${echo_purple}Enable all matching componenents.${echo_normal}
    --disable  | -d    ${echo_purple}Disable all matching componenents.${echo_normal}
@@ -157,24 +151,6 @@ ${echo_underline_yellow}EXAMPLES${echo_normal}
                ${echo_bold_yellow}aliases:  ${echo_normal}git
                ${echo_bold_yellow}plugins:  ${echo_normal}autojump git git-subrepo jump
            ${echo_bold_yellow}completions:  ${echo_normal}git${echo_normal}
-=======
-   For example, ${bold_green}bash-it search git${clr} would match any alias,
-   completion or plugin that has the word 'git' in either the module name or
-   it's description. You should see something like this when you run this
-   command:
-
-         ${bold_green}❯ bash-it search git${bold_blue}
-               aliases:  git gitsvn
-               plugins:  autojump fasd git git-subrepo jgitflow jump
-           completions:  git git_flow git_flow_avh${clr}
-
-   You can exclude some terms by prefixing a term with a minus, eg:
-
-         ${bold_green}❯ bash-it search git -flow -svn${bold_blue}
-               aliases:  git
-               plugins:  autojump fasd git git-subrepo jump
-           completions:  git${clr}
->>>>>>> bebdbbc... Speed up bash-it Search & support exact matches
 
    Finally, if you prefix a term with '@' symbol, that indicates an exact
    match. Note, that we also pass the '--enable' flag, which would ensure
@@ -197,8 +173,6 @@ ${yellow_underlined}SUMMARY${clr}
 "
 }
 
-<<<<<<< HEAD
-=======
 _bash-it-cache-file() {
   local component="${1}"
   local file="/tmp/bash_it/${component}.status"
@@ -239,7 +213,6 @@ _bash-it-grep() {
   printf "%s " "${BASH_IT_GREP}"
 }
 
->>>>>>> bebdbbc... Speed up bash-it Search & support exact matches
 _bash-it-is-partial-match() {
   local component="$1"
   local term="$2"
@@ -255,6 +228,51 @@ _bash-it-component-term-matches-negation() {
 
   return 1
 }
+
+_bash-it-component-help() {
+  local component="$1"
+  local file=$(_bash-it-cache-file ${component})
+  if [[ ! -s "${file}" || -z $(find "${file}" -mmin -60) ]] ; then
+    rm -f "${file}" 2>/dev/null
+    local func="_bash-it-${component}"
+    ${func} | $(_bash-it-grep) -E '   \[' | cat > ${file}
+  fi
+  cat "${file}"
+}
+
+_bash-it-component-list() {
+  local component="$1"
+  _bash-it-component-help "${component}" | awk '{print $1}' | uniq | sort | tr '\n' ' '
+}
+
+_bash-it-component-list-matching() {
+  local component="$1"; shift
+  local term="$1"
+  _bash-it-component-help "${component}" | $(_bash-it-grep) -E -- "${term}" | awk '{print $1}' | sort | uniq
+}
+
+_bash-it-component-list-enabled() {
+  local component="$1"
+  _bash-it-component-help "${component}" | $(_bash-it-grep) -E  '\[x\]' | awk '{print $1}' | uniq | sort | tr '\n' ' '
+}
+
+_bash-it-component-list-disabled() {
+  local component="$1"
+  _bash-it-component-help "${component}" | $(_bash-it-grep) -E -v '\[x\]' | awk '{print $1}' | uniq | sort | tr '\n' ' '
+}
+
+_bash-it-component-item-is-enabled() {
+  local component="$1"
+  local item="$2"
+  _bash-it-component-help "${component}" | $(_bash-it-grep) -E '\[x\]' |  $(_bash-it-grep) -E -q -- "^${item}\s"
+}
+
+_bash-it-component-item-is-disabled() {
+  local component="$1"
+  local item="$2"
+  _bash-it-component-help "${component}" | $(_bash-it-grep) -E -v '\[x\]' |  $(_bash-it-grep) -E -q -- "^${item}\s"
+}
+
 
 _bash-it-search-component() {
   local component="$1"
@@ -382,9 +400,7 @@ _bash-it-search-result() {
 
       local m="${match}${suffix}"
       local len
-<<<<<<< HEAD
       len=${#m}
-=======
       if [[ -n ${NO_COLOR} ]]; then
         local m="${match_color}${match}${suffix}"
         len=${#m}
@@ -392,7 +408,6 @@ _bash-it-search-result() {
         local m="${match}${suffix}"
         len=${#m}
       fi
->>>>>>> bebdbbc... Speed up bash-it Search & support exact matches
 
       printf " ${match_color}${match}${suffix}"  # print current state
       if [[ "${action}" == "${compatible_action}" ]]; then
@@ -412,11 +427,7 @@ _bash-it-search-result() {
       printf "${color_off}"
     done
 
-<<<<<<< HEAD
     [[ ${modified} -gt 0 ]] && _bash-it-clean-component-cache ${component}
-=======
-    [[ ${modified} -gt 0 ]] && _bash-it-cache-clean ${component}
->>>>>>> bebdbbc... Speed up bash-it Search & support exact matches
     printf "\n"
   fi
 }
