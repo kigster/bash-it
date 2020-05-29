@@ -239,10 +239,10 @@ function __powerline_prompt_command {
   local last_status="$?" ## always the first
   local separator_char="${POWERLINE_PROMPT_CHAR}"
 
-
   LEFT_PROMPT=""
   SEGMENTS_AT_LEFT=0
   LAST_SEGMENT_COLOR=""
+
 
   if [[ -n "${POWERLINE_PROMPT_DISTRO_LOGO}" ]]; then
       LEFT_PROMPT+="$(set_color ${PROMPT_DISTRO_LOGO_COLOR} ${PROMPT_DISTRO_LOGO_COLORBG})${PROMPT_DISTRO_LOGO}$(set_color - -)"
@@ -280,3 +280,4 @@ function __powerline_prompt_command {
         LEFT_PROMPT \
         SEGMENTS_AT_LEFT
 }
+

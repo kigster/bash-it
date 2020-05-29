@@ -545,19 +545,18 @@ function _save-and-reload-history() {
   [[ $autosave -eq 1 ]] && history -a && history -c && history -r
 }
 
-
 function prompt_colorscheme {
    [[ -z "${BASH_IT_COLORSCHEME}" ]] && return
 
    local -a colorscheme_locations=(
-     "${HOME}/.${POWERLINE_COLOR_SCHEME}.colorscheme.bash"
-     "$BASH_IT/custom/${POWERLINE_COLOR_SCHEME}.colorscheme.bash"
-     "$BASH_IT/colorschemes/${POWERLINE_COLOR_SCHEME}.colorscheme.bash"
+     "${HOME}/.${BASH_IT_COLORSCHEME}.colorscheme.bash"
+     "$BASH_IT/custom/${BASH_IT_COLORSCHEME}.colorscheme.bash"
+     "$BASH_IT/colorschemes/${BASH_IT_COLORSCHEME}.colorscheme.bash"
    )
 
    for scheme_file in ${colorscheme_locations[@]}; do
      if [[ -f ${scheme_file} ]]; then
-        . "${scheme_file}"
+       source "${scheme_file}"
      fi
    done
 }
