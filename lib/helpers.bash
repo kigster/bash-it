@@ -398,12 +398,7 @@ _disable-thing ()
         fi
     fi
 
-<<<<<<< HEAD
     _bash-it-clean-component-cache "${file_type}"
-=======
-    local flag="DEFER_CACHE_CLEANUP_FOR_${file_type}"
-    [[ -z ${!flag} ]] && _bash-it-cache-clean "${file_type}"
->>>>>>> bebdbbc... Speed up bash-it Search & support exact matches
 
     if [ -n "$BASH_IT_AUTOMATIC_RELOAD_AFTER_CONFIG_CHANGE" ]; then
         exec ${0/-/}
@@ -503,12 +498,7 @@ _enable-thing ()
         ln -s ../$subdirectory/available/$to_enable "${BASH_IT}/enabled/${use_load_priority}${BASH_IT_LOAD_PRIORITY_SEPARATOR}${to_enable}"
     fi
 
-<<<<<<< HEAD
     _bash-it-clean-component-cache "${file_type}"
-=======
-    local flag="DEFER_CACHE_CLEANUP_FOR_${file_type}"
-    [[ -z ${!flag} ]] && _bash-it-cache-clean "${file_type}"
->>>>>>> bebdbbc... Speed up bash-it Search & support exact matches
 
     if [ -n "$BASH_IT_AUTOMATIC_RELOAD_AFTER_CONFIG_CHANGE" ]; then
         exec ${0/-/}

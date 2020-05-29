@@ -229,50 +229,6 @@ _bash-it-component-term-matches-negation() {
   return 1
 }
 
-_bash-it-component-help() {
-  local component="$1"
-  local file=$(_bash-it-cache-file ${component})
-  if [[ ! -s "${file}" || -z $(find "${file}" -mmin -60) ]] ; then
-    rm -f "${file}" 2>/dev/null
-    local func="_bash-it-${component}"
-    ${func} | $(_bash-it-grep) -E '   \[' | cat > ${file}
-  fi
-  cat "${file}"
-}
-
-_bash-it-component-list() {
-  local component="$1"
-  _bash-it-component-help "${component}" | awk '{print $1}' | uniq | sort | tr '\n' ' '
-}
-
-_bash-it-component-list-matching() {
-  local component="$1"; shift
-  local term="$1"
-  _bash-it-component-help "${component}" | $(_bash-it-grep) -E -- "${term}" | awk '{print $1}' | sort | uniq
-}
-
-_bash-it-component-list-enabled() {
-  local component="$1"
-  _bash-it-component-help "${component}" | $(_bash-it-grep) -E  '\[x\]' | awk '{print $1}' | uniq | sort | tr '\n' ' '
-}
-
-_bash-it-component-list-disabled() {
-  local component="$1"
-  _bash-it-component-help "${component}" | $(_bash-it-grep) -E -v '\[x\]' | awk '{print $1}' | uniq | sort | tr '\n' ' '
-}
-
-_bash-it-component-item-is-enabled() {
-  local component="$1"
-  local item="$2"
-  _bash-it-component-help "${component}" | $(_bash-it-grep) -E '\[x\]' |  $(_bash-it-grep) -E -q -- "^${item}\s"
-}
-
-_bash-it-component-item-is-disabled() {
-  local component="$1"
-  local item="$2"
-  _bash-it-component-help "${component}" | $(_bash-it-grep) -E -v '\[x\]' |  $(_bash-it-grep) -E -q -- "^${item}\s"
-}
-
 
 _bash-it-search-component() {
   local component="$1"
