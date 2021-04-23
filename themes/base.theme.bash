@@ -651,8 +651,9 @@ function prompt_colorscheme() {
     "$BASH_IT/colorschemes/${BASH_IT_COLORSCHEME}.colorscheme.bash"
   )
 
-  for scheme_file in ${colorscheme_locations[@]}; do
+  for scheme_file in "${colorscheme_locations[@]}"; do
     if [[ -f ${scheme_file} ]]; then
+
       source "${scheme_file}"
     fi
   done
