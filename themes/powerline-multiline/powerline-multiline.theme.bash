@@ -105,6 +105,6 @@ GCLOUD_CHAR=${POWERLINE_GCLOUD_CHAR:="❲G❳ "}
 COMMAND_DURATION_PROMPT_COLOR=${POWERLINE_COMMAND_DURATION_COLOR:=129}
 
 : "${POWERLINE_LEFT_PROMPT:="scm python_venv ruby node cwd"}"
-: "${POWERLINE_RIGHT_PROMPT:="in_vim clock battery user_info"}"
+: "${POWERLINE_RIGHT_PROMPT:="in_vim clock battery user_info os"}"
 
 safe_append_prompt_command __powerline_prompt_command

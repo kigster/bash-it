@@ -16,6 +16,15 @@ function set_color() {
 	printf '\[\\e[%s%sm\]' "${fg}" "${bg}"
 }
 
+function __powerline_os_prompt() {
+	local os=""
+	os="$(os_prompt)"
+	if [[ -n "${os}" ]]; then
+		printf '%s|%s' "${os}" "${GCLOUD_THEME_PROMPT_COLOR-${POWERLINE_GCLOUD_COLOR-"161"}}"
+	fi
+}
+
+
 #Customising User Info Segment
 function __powerline_user_info_prompt() {
 	local user_info='\u'
@@ -49,7 +58,6 @@ function __powerline_terraform_prompt() {
 
 function __powerline_gcloud_prompt() {
 	local active_gcloud_account=""
-
 	active_gcloud_account="$(active_gcloud_account_prompt)"
 	if [[ -n "${active_gcloud_account}" ]]; then
 		printf '%s%s|%s' "${GCLOUD_CHAR-${POWERLINE_GCLOUD_CHAR-"❲G❳"}}" "${active_gcloud_account}" "${GCLOUD_THEME_PROMPT_COLOR-${POWERLINE_GCLOUD_COLOR-"161"}}"

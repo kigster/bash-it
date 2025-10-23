@@ -224,6 +224,10 @@ function terraform_workspace_prompt() {
 	fi
 }
 
+function os_prompt() {
+	uname -s | tr '[:upper:]' '[:lower:]'
+}
+
 function active_gcloud_account_prompt() {
 	if _command_exists gcloud; then
 		gcloud config list account --format "value(core.account)" 2> /dev/null
